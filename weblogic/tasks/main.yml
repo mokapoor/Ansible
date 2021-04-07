@@ -1,0 +1,8 @@
+---
+# tasks file for weblogic
+- include: packages_mod_v1.yml
+- include: java_setup_v1.yml
+- include: installer_v1.yml
+- include: domain_config.yml
+- include: node_manager.yml
+- include: admin_server.yml

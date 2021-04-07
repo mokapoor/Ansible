@@ -1,0 +1,4 @@
+---
+# vars file for weblogic
+- include: application_vars.yml
+- include: user_vars.yml

@@ -1,0 +1,14 @@
+---
+   - name: Create security folder on Admin Server
+     become: yes
+     file: state=directory path="{{ domain_home }}/servers/AdminServer/security" owner="{{ oracle_user }}" group="{{ oracle_group }}"
+   - name: Create boot.properties file
+     become: yes
+     template: src=boot.properties dest="{{ domain_home }}/servers/AdminServer/security/" owner="{{ oracle_user }}" group="{{ oracle_group }}"
+   - name: Execute start Admin Server script
+     shell: "{{ domain_home }}/startWebLogic.sh"
+     become_user: "{{ oracle_user }}"
+     async: 45
+     poll: 0
+   - name: Wait for Admin Server to startup
+     wait_for: port=7003 delay=3 timeout=30

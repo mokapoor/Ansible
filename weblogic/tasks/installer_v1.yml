@@ -1,0 +1,19 @@
+---
+   - name: Create installer directory
+     file: 
+      state: directory
+      path: "{{ package_files_dir }}/installer"
+      owner: "{{ oracle_user }}"
+      group: "{{ oracle_group }}"
+
+   - name: Copy Weblogic installation distributive on remote
+     synchronize:
+      src: "fmw_12.2.1.0.0_wls.jar"
+      dest: "{{ package_files_dir }}/installer"
+
+   - name: Copy file for silent installation
+     template: src=weblogic.txt dest="{{ package_files_dir }}"
+   - name: Copy OraInst.loc
+     template: src=oraInst.loc dest="{{ package_files_dir }}"
+   - name: execute Weblogic installer
+     command: "{{ jdk_folder }}/bin/java -Xms1024m -Xmx1024m -jar {{ package_files_dir }}/installer/{{ mw_installer }} -silent -responseFile {{ package_files_dir }}/weblogic.txt -invPtrLoc {{ package_files_dir }}/oraInst.loc"

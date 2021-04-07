@@ -1,0 +1,24 @@
+# user and group configuration
+oracle_user: 'web_user'
+oracle_group: 'web_user'
+# Software and configuration main directory
+oracle_base: '/data/Oracle/Middleware/Oracle_Home'
+
+
+# JDK installer and target folder
+jdk_installation_archive: 'jdk-8u91-linux-x64.tar.gz'
+jdk_installation_dir: '/usr/local/'
+jdk_folder: '/usr/local/jdk1.8.0_91'
+
+# fmw installer
+mw_installer: 'fmw_12.2.1.0.0_wls.jar'
+
+# Domain Name
+domain_name: 'dirs_domain'
+
+# Nodemanager and server settings
+node_manager_listen_port: '5556'
+node_manager_listen_address: '192.168.191.130'
+admin_server_hostname: '192.168.191.130'
+weblogic_admin: 'weblogic'
+weblogic_pass: 'Weblogic#321'

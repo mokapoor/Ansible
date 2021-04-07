@@ -1,0 +1,17 @@
+---
+   - name: Copy jdk archive to host
+     copy: 
+       src: "jdk-8u91-linux-x64.tar.gz"
+       dest: "{{ package_files_dir }}"
+           
+   - name: Extract JDK archive
+     become: yes
+     command: tar -zxf "{{ package_files_dir }}"/"{{ jdk_installation_archive }}" -C "{{ jdk_installation_dir }}"
+                              
+   - name: Change ownership of jdk folder
+     become: yes
+     file: path="{{ jdk_folder }}" owner="{{ oracle_user }}" group="{{ oracle_group }}" mode=775 recurse=yes
+   
+   - name: Change entropy device for java
+     become: yes
+     command: "sed -i.bak 's/\\/dev\\/random/\\/dev\\/.\\/urandom/' {{ jdk_folder }}/jre/lib/security/java.security"

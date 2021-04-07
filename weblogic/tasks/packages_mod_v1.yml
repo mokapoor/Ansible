@@ -1,0 +1,59 @@
+---
+   - name: Install required libraries
+     become: yes
+     yum: 
+       name:
+            - 'binutils'
+            - 'gcc.x86_64'
+            - 'gcc-c++.x86_64'
+            - 'glibc.x86_64'
+            - 'glibc-devel.x86_64'
+            - 'libaio.x86_64'
+            - 'libaio-devel.x86_64'
+            - 'libgcc.x86_64'
+            - 'libstdc++.x86_64'
+            - 'libstdc++-devel.x86_64'
+            - 'ksh'
+            - 'make'
+            - 'sysstat'
+            - 'rsync'
+            - 'xorg*'
+       state: latest
+   - name: Change kernel parameters
+     become: yes
+     sysctl: name="{{ item.key }}" value="{{ item.value }}" state=present
+     with_items:
+     - { key: 'kernel.shmmax', value: '2147483648' }
+     - { key: 'kernel.shmall', value: '524288' }
+     - { key: 'net.core.rmem_max', value: '16777216' }
+     - { key: 'net.core.wmem_max', value: '16777216' }
+     - { key: 'net.ipv4.tcp_rmem', value: '4096 87380 16777216' }
+     - { key: 'net.ipv4.tcp_wmem', value: '4096 65536 16777216' }
+     - { key: 'vm.swappiness', value: '10' }
+     - { key: 'vm.dirty_background_ratio', value: '5' }
+     - { key: 'vm.dirty_ratio', value: '10' }
+     - { key: 'fs.file-max', value: '262144' }
+     - { key: 'net.ipv4.tcp_keepalive_time', value: '300' }
+     - { key: 'net.ipv4.tcp_keepalive_intvl', value: '60' }
+     - { key: 'net.ipv4.tcp_keepalive_probes', value: '10' }
+   
+     
+     
+   - name: Create Oracle Home directory
+     become: yes
+     file: state=directory path="{{ oracle_base }}" owner="{{ oracle_user }}" group="{{ oracle_group }}"
+   
+   - name: Add oracle user limits
+     lineinfile: dest=/etc/security/limits.conf line='* {{ item.limit }} {{ item.type}} {{ item.value }}'
+     with_items:
+      - { limit: 'soft', type: nofile, value: '65536' }
+      - { limit: 'hard', type: nofile, value: '65536' }
+     become: yes
+   
+   - name: Create installer directory
+     become: yes
+     file:
+      state: directory
+      path: "{{ package_files_dir }}/installer"
+      owner: "{{ oracle_user }}"
+      group: "{{ oracle_group }}"
