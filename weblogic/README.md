@@ -1,6 +1,7 @@
-Role Name
+Role - Weblogic Server 12C
 
 Ansible role to install and configure Oracle Weblogic Server 12C.
+
 Requirements
 
     Download oracle weblogic installers from https://www.oracle.com/middleware/technologies/weblogic-server-installers-downloads.html
